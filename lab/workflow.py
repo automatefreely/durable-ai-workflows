@@ -7,10 +7,15 @@ from temporalio.exceptions import ActivityError, ApplicationError
 with workflow.unsafe.imports_passed_through():
     import httpx
     from pydantic import ValidationError
+
     from lab.core import mark, proposal, submit
 
-RETRY = RetryPolicy(initial_interval=timedelta(milliseconds=100), backoff_coefficient=2,
-                    maximum_interval=timedelta(seconds=1), maximum_attempts=3)
+RETRY = RetryPolicy(
+    initial_interval=timedelta(milliseconds=100),
+    backoff_coefficient=2,
+    maximum_interval=timedelta(seconds=1),
+    maximum_attempts=3,
+)
 
 
 @activity.defn
@@ -49,15 +54,18 @@ class InvoiceWorkflow:
     async def run(self, data: dict) -> dict:
         try:
             invoice = await workflow.execute_activity(
-                propose, data, start_to_close_timeout=timedelta(seconds=15), retry_policy=RETRY)
+                propose, data, start_to_close_timeout=timedelta(seconds=15), retry_policy=RETRY
+            )
         except ActivityError:
             return {"status": "rejected"}
-        await workflow.execute_activity(awaiting, data["operation_id"],
-                                        start_to_close_timeout=timedelta(seconds=2), retry_policy=RETRY)
+        await workflow.execute_activity(
+            awaiting, data["operation_id"], start_to_close_timeout=timedelta(seconds=2), retry_policy=RETRY
+        )
         await workflow.wait_condition(lambda: self.approved)
         try:
             result = await workflow.execute_activity(
-                create, args=[data, invoice], start_to_close_timeout=timedelta(seconds=2), retry_policy=RETRY)
+                create, args=[data, invoice], start_to_close_timeout=timedelta(seconds=2), retry_policy=RETRY
+            )
             return {"status": "completed", **result}
         except ActivityError:
             # Could have committed externally: operator must reconcile by operation ID.

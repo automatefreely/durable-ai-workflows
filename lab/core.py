@@ -26,13 +26,14 @@ async def proposal(data):
     await mark(data["operation_id"], "model_call")
     if data.get("model_mode") == "openai":
         from openai import AsyncOpenAI
+
         model = os.environ["OPENAI_MODEL"]
         # Model retries disabled: orchestration owns retries, and output must validate.
         async with AsyncOpenAI(max_retries=0, timeout=10) as c:
             response = await c.responses.create(
                 model=model,
                 instructions="Return only JSON with customer, amount_minor (integer), and currency. "
-                             "Copy the request exactly. Do not add fields.",
+                "Copy the request exactly. Do not add fields.",
                 input=json.dumps(data["request"]),
             )
         fields = json.loads(response.output_text)

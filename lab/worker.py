@@ -3,6 +3,7 @@ import json
 import os
 import sys
 
+import httpx
 from temporalio.client import Client
 from temporalio.worker import Worker
 
@@ -28,16 +29,19 @@ async def main():
                 result = await submit(data, invoice)
                 print(json.dumps({"status": "completed", **result}), flush=True)
                 return
-            except Exception as e:
-                import httpx
+            except (httpx.TransportError, httpx.HTTPStatusError) as e:
                 if isinstance(e, httpx.HTTPStatusError) and e.response.status_code < 500:
                     break
                 await asyncio.sleep(0.1 * 2**attempt)
         print(json.dumps({"status": "needs_reconciliation"}), flush=True)
     else:
         client = await Client.connect(os.environ.get("TEMPORAL_ADDRESS", "127.0.0.1:7233"))
-        async with Worker(client, task_queue=os.environ.get("TASK_QUEUE", "invoice-lab"),
-                          workflows=[InvoiceWorkflow], activities=[propose, create, awaiting]):
+        async with Worker(
+            client,
+            task_queue=os.environ.get("TASK_QUEUE", "invoice-lab"),
+            workflows=[InvoiceWorkflow],
+            activities=[propose, create, awaiting],
+        ):
             print("WORKER_READY", flush=True)
             await asyncio.Event().wait()
 

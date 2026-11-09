@@ -1,0 +1,31 @@
+name: Verify crash-recovery lab
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start isolated services
+        run: |
+          docker compose build
+          docker compose up -d --wait temporal invoice
+      - name: Lint, unit tests, and real-process matrix
+        run: |
+          export LAB_SOURCE_COMMIT="$(git rev-parse HEAD)"
+          docker compose run --rm runner ruff check lab tests
+          docker compose run --rm runner pytest tests/test_receiver.py -q
+          docker compose run --rm runner python -m lab.run --repeat 1 --output /artifacts/ci
+          docker compose run --rm -e LAB_INTEGRATION=1 -e LAB_EVIDENCE=/artifacts/ci runner pytest tests/test_integration.py -q
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: experiment-evidence
+          path: artifacts/
+      - name: Stop services
+        if: always()
+        run: docker compose down

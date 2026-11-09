@@ -1,4 +1,5 @@
 """Independent receiver: invoice and idempotency receipt commit in one transaction."""
+
 import asyncio
 import hashlib
 import json
@@ -22,7 +23,7 @@ def database():
     DB.parent.mkdir(parents=True, exist_ok=True)
     c = sqlite3.connect(DB, timeout=20)
     c.row_factory = sqlite3.Row
-    c.executescript('''
+    c.executescript("""
     CREATE TABLE IF NOT EXISTS invoices (
       id TEXT PRIMARY KEY, tenant TEXT NOT NULL, operation_id TEXT NOT NULL, payload TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS receipts (
@@ -33,7 +34,7 @@ def database():
     CREATE TABLE IF NOT EXISTS events (
       seq INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL, operation_id TEXT NOT NULL,
       kind TEXT NOT NULL, detail TEXT NOT NULL);
-    ''')
+    """)
     try:
         yield c
         c.commit()
@@ -45,8 +46,10 @@ def database():
 
 
 def event(c, operation, kind, detail=None):
-    c.execute("INSERT INTO events(ts,operation_id,kind,detail) VALUES(?,?,?,?)",
-              (time.time(), operation, kind, json.dumps(detail or {})))
+    c.execute(
+        "INSERT INTO events(ts,operation_id,kind,detail) VALUES(?,?,?,?)",
+        (time.time(), operation, kind, json.dumps(detail or {})),
+    )
 
 
 class Invoice(BaseModel):
@@ -83,8 +86,13 @@ async def create_invoice(body: Invoice, idempotency_key: str | None = Header(def
         if transient:
             event(c, body.operation_id, "transient_failure")
         else:
-            receipt = c.execute("SELECT * FROM receipts WHERE tenant=? AND key=?",
-                                (body.tenant, idempotency_key)).fetchone() if idempotency_key else None
+            receipt = (
+                c.execute(
+                    "SELECT * FROM receipts WHERE tenant=? AND key=?", (body.tenant, idempotency_key)
+                ).fetchone()
+                if idempotency_key
+                else None
+            )
             if receipt:
                 if receipt["digest"] != digest:
                     raise HTTPException(409, "Idempotency key reused with different payload")
@@ -92,11 +100,15 @@ async def create_invoice(body: Invoice, idempotency_key: str | None = Header(def
                 event(c, body.operation_id, "invoice_reused", {"invoice_id": invoice_id})
             else:
                 invoice_id = str(uuid.uuid4())
-                c.execute("INSERT INTO invoices VALUES(?,?,?,?)",
-                          (invoice_id, body.tenant, body.operation_id, payload))
+                c.execute(
+                    "INSERT INTO invoices VALUES(?,?,?,?)",
+                    (invoice_id, body.tenant, body.operation_id, payload),
+                )
                 if idempotency_key:
-                    c.execute("INSERT INTO receipts VALUES(?,?,?,?)",
-                              (body.tenant, idempotency_key, digest, invoice_id))
+                    c.execute(
+                        "INSERT INTO receipts VALUES(?,?,?,?)",
+                        (body.tenant, idempotency_key, digest, invoice_id),
+                    )
                 event(c, body.operation_id, "invoice_committed", {"invoice_id": invoice_id})
     if transient:
         raise HTTPException(503, "Injected temporary outage")
@@ -109,12 +121,14 @@ async def create_invoice(body: Invoice, idempotency_key: str | None = Header(def
 @app.get("/invoices/by-operation/{operation_id}")
 def lookup(operation_id: str, tenant: str):
     with database() as c:
-        rows = c.execute("SELECT id FROM invoices WHERE operation_id=? AND tenant=?",
-                         (operation_id, tenant)).fetchall()
+        rows = c.execute(
+            "SELECT id FROM invoices WHERE operation_id=? AND tenant=?", (operation_id, tenant)
+        ).fetchall()
     return {"invoice_ids": [r["id"] for r in rows]}
 
 
 if TEST_MODE:
+
     class Control(BaseModel):
         operation_id: str
         scenario: str
@@ -122,8 +136,9 @@ if TEST_MODE:
     @app.post("/_test/configure")
     def configure(body: Control):
         with database() as c:
-            c.execute("INSERT INTO controls(operation_id,scenario) VALUES(?,?)",
-                      (body.operation_id, body.scenario))
+            c.execute(
+                "INSERT INTO controls(operation_id,scenario) VALUES(?,?)", (body.operation_id, body.scenario)
+            )
         return {"ok": True}
 
     @app.post("/_test/event/{operation_id}/{kind}")
@@ -136,7 +151,9 @@ if TEST_MODE:
     def consume(operation_id: str):
         with database() as c:
             c.execute("BEGIN IMMEDIATE")
-            row = c.execute("SELECT fault_consumed FROM controls WHERE operation_id=?", (operation_id,)).fetchone()
+            row = c.execute(
+                "SELECT fault_consumed FROM controls WHERE operation_id=?", (operation_id,)
+            ).fetchone()
             consumed = bool(row and row["fault_consumed"])
             c.execute("UPDATE controls SET fault_consumed=1 WHERE operation_id=?", (operation_id,))
         return {"first": not consumed}
@@ -144,6 +161,8 @@ if TEST_MODE:
     @app.get("/_test/snapshot/{operation_id}")
     def snapshot(operation_id: str):
         with database() as c:
-            rows = c.execute("SELECT * FROM events WHERE operation_id=? ORDER BY seq", (operation_id,)).fetchall()
+            rows = c.execute(
+                "SELECT * FROM events WHERE operation_id=? ORDER BY seq", (operation_id,)
+            ).fetchall()
             invoices = c.execute("SELECT id FROM invoices WHERE operation_id=?", (operation_id,)).fetchall()
         return {"events": [dict(r) for r in rows], "invoice_ids": [r["id"] for r in invoices]}
