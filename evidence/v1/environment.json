@@ -1,0 +1,40 @@
+{
+  "execution": "Sequential Docker Compose campaign; fixture model; three variants, eight scenarios, ten repetitions",
+  "tested_source_commit": "0453ff16f18354e9d7c75b8aa9fac1095c7b2beb",
+  "source_attestation": "Image was built immediately after committing clean source 0453ff1; listed runtime files still match it byte-for-byte. Later additions are verification, tests, documentation and evidence.",
+  "runtime_source_sha256": {
+    "lab/core.py": "5a2c3a2efdcde25dfb2118edea7132f73f0e5c93636ec6b943416081a5ac3bea",
+    "lab/service.py": "eebfdefee7c35ff7f7aacdc7003fdfee32ab4562e439eb72161d43d333e61a17",
+    "lab/workflow.py": "3e1eae843131273e4f9e8ae4b4abd4986d0185e207ab2efe9ed77b0c64e8df35",
+    "lab/worker.py": "ea34abf8bbc546bf3d1426739f0191ab7c71a19f3de831d9de56a753c4156b08",
+    "lab/run.py": "87775036ecd0932bf8d607cd3a744ce6e5b92123cdec5c6224ec5c76cbe91233",
+    "pyproject.toml": "852e78f32b955b964c254590a2e35f9aa7ec6bac9540984343327f63274a025a",
+    "uv.lock": "1b18e5226fcef7a11b2a2ded97573444cd66aee581c2baa9237ad51459284198",
+    "compose.yaml": "d92b708906b51bab66f236bb2af41f00f907304ee20e6543c7c582287248e285",
+    "Dockerfile": "e3828752c3cddaf0845cac8b57e96bdc639fd5a411c3e439acfeb3142fd27b5b"
+  },
+  "app_image_id": "sha256:b50f05c61f52dadc0b02e26287eab30d8dc056d6201638e7bb25b08166713f61",
+  "base_images": {
+    "temporal": "temporalio/temporal:1.4.1@sha256:9844298258519ebece82b3253f1ee1fc4eb8d87b7abcc264cfb676be342c74a5",
+    "python": "python:3.12.14-slim-bookworm@sha256:392307d22300de8b5986851a12d9176dfc0fc073e65bf6523ebd7dcbeb23564e",
+    "uv": "ghcr.io/astral-sh/uv:0.13.5@sha256:32a7bb39b496babbd997b0a39a4d66c126bdaf5661b302bf6f06abda8deca6ff"
+  },
+  "host_platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "native_additional_tests": {
+    "receiver_and_adapter_and_workflow_and_pilot_replay": "14 passed; isolated restart test skipped in that invocation",
+    "isolated_persistent_server_restart": "1 passed separately before starting the Compose campaign"
+  },
+  "real_model_calls": 0,
+  "caveats": [
+    "Local development persistence, not a production deployment",
+    "Fixtures test orchestration, not model intelligence",
+    "Recovery duration includes process startup, scheduling, timeouts and polling",
+    "Unsafe control failures are expected experimental outcomes"
+  ],
+  "final_validation": {
+    "command": "LAB_INTEGRATION=1 LAB_EVIDENCE=evidence/v1 uv run pytest -q",
+    "result": "14 passed, 1 skipped; replay test checked all 160 recorded Temporal histories",
+    "skipped": "Isolated restart test is opt-in; it passed separately against its named persistent lab container",
+    "real_model_calls": 0
+  }
+}

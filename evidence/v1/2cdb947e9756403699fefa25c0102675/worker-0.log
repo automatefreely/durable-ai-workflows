@@ -1,0 +1,35 @@
+WORKER_READY
+Completing activity as failed ({'activity_id': '1', 'activity_type': 'propose', 'attempt': 1, 'namespace': 'default', 'task_queue': 'lab-2cdb947e9756403699fefa25c0102675', 'workflow_id': 'invoice:synthetic-tenant:2cdb947e9756403699fefa25c0102675', 'workflow_run_id': '01a1c0db-dd45-768c-8d94-629ffc9b5d38', 'workflow_type': 'InvoiceWorkflow'})
+Traceback (most recent call last):
+  File "/app/lab/workflow.py", line 24, in propose
+    return await proposal(data)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/app/lab/core.py", line 42, in proposal
+    invoice = Invoice(tenant=data["tenant"], operation_id=data["operation_id"], **fields)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.12/site-packages/pydantic/main.py", line 280, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for Invoice
+amount_minor
+  Input should be greater than 0 [type=greater_than, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.14/v/greater_than
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/.venv/lib/python3.12/site-packages/temporalio/worker/_activity.py", line 379, in _handle_start_activity_task
+    result = await self._execute_activity(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.12/site-packages/temporalio/worker/_activity.py", line 712, in _execute_activity
+    return await impl.execute_activity(input)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.12/site-packages/temporalio/worker/_activity.py", line 921, in execute_activity
+    return await input.fn(*input.args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/lab/workflow.py", line 26, in propose
+    raise ApplicationError(str(e), type="InvalidProposal", non_retryable=True) from e
+temporalio.exceptions.ApplicationError: InvalidProposal: 1 validation error for Invoice
+amount_minor
+  Input should be greater than 0 [type=greater_than, input_value=-1, input_type=int]
+    For further information visit https://errors.pydantic.dev/2.14/v/greater_than

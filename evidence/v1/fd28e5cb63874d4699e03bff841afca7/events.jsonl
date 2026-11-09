@@ -1,0 +1,2 @@
+{"ts": 1794236009.541097, "operation_id": "fd28e5cb63874d4699e03bff841afca7", "kind": "worker_started", "detail": {"pid": 205}, "source": "harness"}
+{"seq": 561, "ts": 1794236010.0913174, "operation_id": "fd28e5cb63874d4699e03bff841afca7", "kind": "model_call", "detail": {}, "source": "receiver"}

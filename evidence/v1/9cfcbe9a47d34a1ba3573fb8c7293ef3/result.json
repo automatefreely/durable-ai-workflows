@@ -1,0 +1,16 @@
+{
+  "run_id": "9cfcbe9a47d34a1ba3573fb8c7293ef3",
+  "workflow_id": "invoice:synthetic-tenant:9cfcbe9a47d34a1ba3573fb8c7293ef3",
+  "variant": "temporal",
+  "scenario": "crash_before",
+  "repetition": 8,
+  "status": "completed",
+  "invoice_count": 1,
+  "duplicate_count": 0,
+  "model_calls": 1,
+  "activity_attempts": 2,
+  "invoice_requests": 1,
+  "elapsed_s": 15.6645,
+  "recovery_s": 13.0486,
+  "assertions_passed": true
+}

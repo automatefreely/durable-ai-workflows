@@ -1,0 +1,12 @@
+{
+  "tenant": "synthetic-tenant",
+  "operation_id": "dcbee7b2c2ac4625802ad8c74a1f0272",
+  "variant": "protected",
+  "scenario": "duplicate_start",
+  "model_mode": "fixture",
+  "request": {
+    "customer": "Example Customer",
+    "amount_minor": 12500,
+    "currency": "USD"
+  }
+}

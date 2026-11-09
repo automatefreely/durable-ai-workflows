@@ -1,0 +1,16 @@
+{
+  "type": "Recorded playback of saved events, not live footage",
+  "timing": "Playback pauses compressed; displayed event times are original offsets",
+  "runs": [
+    {
+      "run_id": "1ee30a2c21ab4201ad1b73d918d0973d",
+      "variant": "temporal",
+      "raw_events": "v1/1ee30a2c21ab4201ad1b73d918d0973d/events.jsonl"
+    },
+    {
+      "run_id": "5f1bae5d3c3944c59ea29abffbb330aa",
+      "variant": "protected",
+      "raw_events": "v1/5f1bae5d3c3944c59ea29abffbb330aa/events.jsonl"
+    }
+  ]
+}

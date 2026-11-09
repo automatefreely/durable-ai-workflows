@@ -29,6 +29,10 @@ docker compose run --rm runner python -m lab.run --repeat 1 --output /artifacts/
 docker compose run --rm runner
 ```
 
+If using the prepared source archive instead of Git, skip clone/checkout and set
+`LAB_SOURCE_COMMIT` from its included `SOURCE_COMMIT.txt`. A GitHub-generated archive
+without that file needs the release commit SHA supplied explicitly.
+
 Open `artifacts/latest/REPORT.md`. Each run also has input, JSONL events, worker logs,
 a result, and (for Temporal variants) execution history. The CLI exits nonzero on an
 unexpected result. Unsafe controls are EXPECTED to duplicate invoices in specific

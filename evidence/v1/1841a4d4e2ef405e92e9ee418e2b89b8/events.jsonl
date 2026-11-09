@@ -1,0 +1,11 @@
+{"ts": 1794236408.796013, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "worker_started", "detail": {"pid": 878}, "source": "harness"}
+{"seq": 1072, "ts": 1794236410.9455552, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "model_call", "detail": {}, "source": "receiver"}
+{"seq": 1073, "ts": 1794236411.0357072, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "awaiting_approval", "detail": {}, "source": "receiver"}
+{"ts": 1794236411.0735507, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "approval_sent", "detail": {}, "source": "harness"}
+{"seq": 1074, "ts": 1794236411.155232, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "activity_attempt", "detail": {}, "source": "receiver"}
+{"seq": 1075, "ts": 1794236411.238522, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "invoice_request", "detail": {"key": null}, "source": "receiver"}
+{"seq": 1076, "ts": 1794236411.2388463, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "invoice_committed", "detail": {"invoice_id": "022d1c73-54db-48c7-a99c-8d94f3515a25"}, "source": "receiver"}
+{"seq": 1077, "ts": 1794236412.1604064, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "activity_attempt", "detail": {}, "source": "receiver"}
+{"seq": 1078, "ts": 1794236412.2475278, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "invoice_request", "detail": {"key": null}, "source": "receiver"}
+{"seq": 1079, "ts": 1794236412.2477477, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "invoice_committed", "detail": {"invoice_id": "ff0cd1b9-99e5-44ee-b86f-e6a882c4164e"}, "source": "receiver"}
+{"seq": 1080, "ts": 1794236412.3304005, "operation_id": "1841a4d4e2ef405e92e9ee418e2b89b8", "kind": "response_received", "detail": {}, "source": "receiver"}

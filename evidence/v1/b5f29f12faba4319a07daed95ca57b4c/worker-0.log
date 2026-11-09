@@ -1,0 +1,21 @@
+WORKER_READY
+Completing activity as failed ({'activity_id': '3', 'activity_type': 'create', 'attempt': 1, 'namespace': 'default', 'task_queue': 'lab-b5f29f12faba4319a07daed95ca57b4c', 'workflow_id': 'invoice:synthetic-tenant:b5f29f12faba4319a07daed95ca57b4c', 'workflow_run_id': '01a1c0db-6c20-7770-b678-da63ad9e260c', 'workflow_type': 'InvoiceWorkflow'})
+Traceback (most recent call last):
+  File "/app/.venv/lib/python3.12/site-packages/temporalio/worker/_activity.py", line 379, in _handle_start_activity_task
+    result = await self._execute_activity(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.12/site-packages/temporalio/worker/_activity.py", line 712, in _execute_activity
+    return await impl.execute_activity(input)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/.venv/lib/python3.12/site-packages/temporalio/worker/_activity.py", line 921, in execute_activity
+    return await input.fn(*input.args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/lab/workflow.py", line 32, in create
+    return await submit(data, invoice)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/lab/core.py", line 56, in submit
+    r.raise_for_status()
+  File "/app/.venv/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Server error '503 Service Unavailable' for url 'http://invoice:8000/invoices'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/503

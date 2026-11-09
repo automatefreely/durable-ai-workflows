@@ -1,0 +1,16 @@
+{
+  "run_id": "f5b3ad04fc8440a89dd19f9e453240b7",
+  "workflow_id": null,
+  "variant": "plain",
+  "scenario": "lost_response",
+  "repetition": 5,
+  "status": "completed",
+  "invoice_count": 2,
+  "duplicate_count": 1,
+  "model_calls": 1,
+  "activity_attempts": 2,
+  "invoice_requests": 2,
+  "elapsed_s": 1.9579,
+  "recovery_s": null,
+  "assertions_passed": true
+}

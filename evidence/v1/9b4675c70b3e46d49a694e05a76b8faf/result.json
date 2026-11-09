@@ -1,0 +1,16 @@
+{
+  "run_id": "9b4675c70b3e46d49a694e05a76b8faf",
+  "workflow_id": null,
+  "variant": "plain",
+  "scenario": "approval_restart",
+  "repetition": 7,
+  "status": "needs_reapproval",
+  "invoice_count": 0,
+  "duplicate_count": 0,
+  "model_calls": 2,
+  "activity_attempts": 0,
+  "invoice_requests": 0,
+  "elapsed_s": 1.5691,
+  "recovery_s": 0.8234,
+  "assertions_passed": true
+}
