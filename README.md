@@ -3,6 +3,9 @@
 A local, synthetic experiment accompanying **Beyond the Agent Loop: Build AI Workflows
 That Survive Crashes and Retries** by Automate Freely.
 
+[Read the published article](https://automatefreely.com/blog/durable-ai-workflows)
+for the failure timeline, implementation walkthrough, and measured results.
+
 We compare a plain in-memory loop, Temporal without receiver idempotency, and Temporal
 with an atomic idempotency receipt. The runner sends real SIGKILL signals at explicit
 barriers. It does not simulate a crash by raising an exception.

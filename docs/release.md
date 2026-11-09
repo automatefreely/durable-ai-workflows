@@ -1,24 +1,31 @@
-# Release gate: prepared locally, not published
+# Release status
 
-The public repository is intentionally not created by this preparation step.
-The website article remains `published: false`. Publishing the companion source,
-creating its public release, and deploying the article are later release actions.
+The companion repository and `v1.0.0` Git tag are public. The article is live:
 
-After reviewing the code, evidence and article:
+- Article: https://automatefreely.com/blog/durable-ai-workflows
+- Versioned code: https://github.com/automatefreely/durable-ai-workflows/tree/v1.0.0
+- Evidence: https://github.com/automatefreely/durable-ai-workflows/blob/v1.0.0/evidence/v1/REPORT.md
 
-1. Check repository-name availability for `automatefreely/durable-ai-workflows` again.
-   Do not silently change a repository name that is embedded in article links.
-2. Create the public repository without generating a README/license on GitHub.
-3. Add its origin URL to this prepared repository and push the reviewed history/tag.
-4. Publish a v1.0.0 release with the source archive, SHA256 sums, and evidence replay.
-5. Clone the public tag into an empty directory and execute the README quickstart.
-6. Verify evidence/v1/manifest.json, environment.json, REPORT.md and SHA256SUMS.
-7. Set the website article's actual date and `published: true`, review the publication
-   diff, deploy, and run the launch checklist in the website article PR.
+The original preparation bundles and versioned release instructions describe their
+historical state. The existing tag and recorded evidence remain unchanged.
+A separate GitHub Release asset page has not been created.
 
-No tag name or checksum makes a release trustworthy by itself; inspect the source,
-retain provenance, and compare the receiver events with the generated summary.
+## Completed verification
 
-The optional OpenAI integration has offline adapter contract tests. No paid model
-calls are included in the recorded release campaign. CI configuration is supplied;
-do not call it a remotely passing CI run until the workflow actually runs on GitHub.
+- The primary 240-run campaign passed all expected assertions.
+- Receiver, adapter, integration and replay tests passed; all 160 Temporal histories replayed.
+- A clean-checkout reproduction confirmed the decisive post-commit crash behavior.
+- GitHub Actions verification completed successfully after the public push.
+- After the article merge, live desktop/mobile browser checks passed at five widths.
+- The article is present in the sitemap and has its production canonical URL.
+- Social crawlers can fetch the article and its 1200×630 PNG share image.
+
+## Ongoing publication work
+
+Inspect the article in an authorized Google Search Console property and request indexing.
+Use the website launch kit for distribution drafts; no social posts or emails have
+been sent automatically. Review available search/referral signals after publication.
+
+For future code changes, retain immutable evidence provenance and rerun applicable
+checks. Do not move the existing version tag to incorporate documentation updates.
+No paid model calls are included in the recorded campaign; optional adapter tests are offline.
