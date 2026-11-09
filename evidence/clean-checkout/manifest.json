@@ -1,0 +1,26 @@
+{
+  "started_at": 1794237261.3679342,
+  "python": "3.12.14 (main, Sep 19 2026, 01:05:48) [GCC 12.2.0]",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.36",
+  "source_commit": "4570c22046ecf96bcbf04a11fea79896666fddcf",
+  "source_dirty": null,
+  "packages": {
+    "temporalio": "1.35.0",
+    "fastapi": "0.162.2",
+    "httpx": "0.28.1",
+    "uvicorn": "0.54.0",
+    "openai": "2.54.0"
+  },
+  "arguments": {
+    "repeat": 1,
+    "variant": null,
+    "scenario": [
+      "crash_after"
+    ],
+    "output": "/artifacts/clean-checkout",
+    "model_mode": "fixture",
+    "report": false
+  },
+  "model_mode": "fixture",
+  "lock_sha256": "1b18e5226fcef7a11b2a2ded97573444cd66aee581c2baa9237ad51459284198"
+}

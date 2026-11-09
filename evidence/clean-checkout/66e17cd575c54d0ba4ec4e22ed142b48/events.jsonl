@@ -1,0 +1,15 @@
+{"ts": 1794237280.301089, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "worker_started", "detail": {"pid": 37}, "source": "harness"}
+{"seq": 1938, "ts": 1794237282.888847, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "model_call", "detail": {}, "source": "receiver"}
+{"seq": 1939, "ts": 1794237283.1825047, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "awaiting_approval", "detail": {}, "source": "receiver"}
+{"ts": 1794237283.2311287, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "approval_sent", "detail": {}, "source": "harness"}
+{"seq": 1940, "ts": 1794237283.364377, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "activity_attempt", "detail": {}, "source": "receiver"}
+{"seq": 1941, "ts": 1794237283.4644253, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "invoice_request", "detail": {"key": "synthetic-tenant:66e17cd575c54d0ba4ec4e22ed142b48:create-invoice"}, "source": "receiver"}
+{"seq": 1942, "ts": 1794237283.4660122, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "invoice_committed", "detail": {"invoice_id": "ddbd2729-80fa-433d-96b3-e8b18e4871f5"}, "source": "receiver"}
+{"seq": 1943, "ts": 1794237283.5888233, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "response_received", "detail": {}, "source": "receiver"}
+{"seq": 1944, "ts": 1794237283.7737615, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "after_commit_barrier", "detail": {}, "source": "receiver"}
+{"ts": 1794237283.8081758, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "worker_killed", "detail": {"returncode": -9}, "source": "harness"}
+{"ts": 1794237283.8091125, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "worker_restarted", "detail": {"pid": 45}, "source": "harness"}
+{"seq": 1945, "ts": 1794237286.1340272, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "activity_attempt", "detail": {}, "source": "receiver"}
+{"seq": 1946, "ts": 1794237286.2128985, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "invoice_request", "detail": {"key": "synthetic-tenant:66e17cd575c54d0ba4ec4e22ed142b48:create-invoice"}, "source": "receiver"}
+{"seq": 1947, "ts": 1794237286.2130725, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "invoice_reused", "detail": {"invoice_id": "ddbd2729-80fa-433d-96b3-e8b18e4871f5"}, "source": "receiver"}
+{"seq": 1948, "ts": 1794237286.3078742, "operation_id": "66e17cd575c54d0ba4ec4e22ed142b48", "kind": "response_received", "detail": {}, "source": "receiver"}

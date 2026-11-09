@@ -1,0 +1,4 @@
+run_id,workflow_id,variant,scenario,repetition,status,invoice_count,duplicate_count,model_calls,activity_attempts,invoice_requests,elapsed_s,recovery_s,assertions_passed
+66e17cd575c54d0ba4ec4e22ed142b48,invoice:synthetic-tenant:66e17cd575c54d0ba4ec4e22ed142b48,protected,crash_after,0,completed,1,0,1,2,2,16.2756,12.7725,True
+9ec2afddfa1f446cb580931231d6c5cc,,plain,crash_after,0,completed,2,1,2,2,2,3.0793,1.7009,True
+ab35b9d3831d42059756d6df16e4e407,invoice:synthetic-tenant:ab35b9d3831d42059756d6df16e4e407,temporal,crash_after,0,completed,2,1,1,2,2,15.5699,12.8553,True
