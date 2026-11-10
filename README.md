@@ -35,9 +35,9 @@ If using the prepared source archive instead of Git, skip clone/checkout and set
 `LAB_SOURCE_COMMIT` from its included `SOURCE_COMMIT.txt`. A GitHub-generated archive
 without that file needs the release commit SHA supplied explicitly.
 
-The full recorded campaign took **20.5 minutes** in its recorded environment, excluding
-image building and dependency downloads. The 24-case smoke run is shorter; runtime
-varies with hardware and scheduling.
+The recorded run execution times total **20.5 minutes** in their recorded environment.
+Allow extra time for image builds, dependency downloads, evidence export and cleanup.
+The 24-case smoke run is shorter; runtime varies with hardware and scheduling.
 
 The quickstart uses the maintained code on `main`. For the exact source snapshot used
 in the published 240-run evidence, run `git checkout v1.0.0` before building. That tag
