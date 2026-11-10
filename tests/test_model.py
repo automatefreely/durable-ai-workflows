@@ -56,3 +56,40 @@ async def test_real_adapter_contract_without_provider(invalid, monkeypatch):
     assert observed["options"]["max_retries"] == 0
     assert observed["model"] == "synthetic-test-model"
     assert observed["event"] == ("model-contract", "model_call")
+
+
+@pytest.mark.parametrize(
+    "output",
+    [
+        "[]",
+        "null",
+        "not JSON",
+        '{"customer":"Example","amount_minor":100,"currency":"USD","tenant":"other"}',
+    ],
+)
+async def test_malformed_proposals_are_permanent_rejections(output, monkeypatch):
+    from unittest.mock import AsyncMock
+
+    from temporalio.exceptions import ApplicationError
+
+    from lab.workflow import propose
+
+    class FakeClient:
+        def __init__(self, **kwargs):
+            self.responses = SimpleNamespace(
+                create=AsyncMock(return_value=SimpleNamespace(output_text=output))
+            )
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *_):
+            return None
+
+    monkeypatch.setattr(core, "mark", AsyncMock())
+    monkeypatch.setenv("OPENAI_MODEL", "synthetic-test-model")
+    monkeypatch.setattr("openai.AsyncOpenAI", FakeClient)
+    with pytest.raises(ApplicationError) as failure:
+        await propose(data())
+    assert failure.value.type == "InvalidProposal"
+    assert failure.value.non_retryable is True

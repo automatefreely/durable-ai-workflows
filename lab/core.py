@@ -39,6 +39,8 @@ async def proposal(data):
         fields = json.loads(response.output_text)
     else:
         fields = dict(data["request"])
+    if not isinstance(fields, dict) or set(fields) != {"customer", "amount_minor", "currency"}:
+        raise ValueError("Proposal must contain exactly customer, amount_minor, and currency")
     invoice = Invoice(tenant=data["tenant"], operation_id=data["operation_id"], **fields)
     return invoice.model_dump()
 
