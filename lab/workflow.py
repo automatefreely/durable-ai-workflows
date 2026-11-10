@@ -56,8 +56,11 @@ class InvoiceWorkflow:
             invoice = await workflow.execute_activity(
                 propose, data, start_to_close_timeout=timedelta(seconds=15), retry_policy=RETRY
             )
-        except ActivityError:
-            return {"status": "rejected"}
+        except ActivityError as error:
+            if isinstance(error.cause, ApplicationError) and error.cause.type == "InvalidProposal":
+                return {"status": "rejected"}
+            # Transport errors, provider outages and timeouts are operational failures.
+            return {"status": "proposal_failed"}
         await workflow.execute_activity(
             awaiting, data["operation_id"], start_to_close_timeout=timedelta(seconds=2), retry_policy=RETRY
         )

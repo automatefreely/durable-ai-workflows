@@ -226,7 +226,8 @@ async def one(client, c, root, variant, scenario, repetition, model_mode="fixtur
         )
         assert result["status"] == expected_status, result
         assert len(s["invoice_ids"]) == expected_invoices, s
-        if variant != "plain":
+        # Real provider requests may be retried before a result is persisted.
+        if variant != "plain" and model_mode == "fixture":
             assert counts["model_call"] == 1, counts
         if scenario in {"crash_before", "crash_after", "approval_restart"}:
             assert any(e["kind"] == "worker_killed" and e["detail"]["returncode"] == -9 for e in harness)

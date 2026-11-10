@@ -18,9 +18,15 @@ jobs:
         run: |
           export LAB_SOURCE_COMMIT="$(git rev-parse HEAD)"
           docker compose run --rm runner ruff check lab tests
-          docker compose run --rm runner pytest tests/test_receiver.py -q
+          docker compose run --rm runner pytest tests/test_receiver.py tests/test_model.py tests/test_workflow_errors.py -q
           docker compose run --rm runner python -m lab.run --repeat 1 --output /artifacts/ci
           docker compose run --rm -e LAB_INTEGRATION=1 -e LAB_EVIDENCE=/artifacts/ci runner pytest tests/test_integration.py -q
+      - name: Independently verify generated and published evidence
+        run: |
+          docker compose run --rm runner python -m lab.verify /artifacts/ci --repeat 1
+          docker compose run --rm runner sh -c 'cd evidence/v1 && sha256sum --check --quiet SHA256SUMS'
+          docker compose run --rm runner sh -c 'cp -a evidence/v1 /tmp/published-evidence && python -m lab.verify /tmp/published-evidence'
+          docker compose run --rm -e LAB_INTEGRATION=1 -e LAB_EVIDENCE=evidence/v1 runner pytest tests/test_integration.py::test_replay_recorded_histories -q
       - uses: actions/upload-artifact@v4
         if: always()
         with:
