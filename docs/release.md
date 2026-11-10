@@ -26,6 +26,14 @@ Inspect the article in an authorized Google Search Console property and request 
 Use the website launch kit for distribution drafts; no social posts or emails have
 been sent automatically. Review available search/referral signals after publication.
 
+## Maintenance verification
+
+The updated workflow separates provider failures from rejected proposals. CI covers
+receiver tests, model-adapter contract tests, workflow error regression tests, the
+24-case real-process smoke campaign, independent event verification, original evidence
+checksums, and replay of the generated and all 160 published histories. The server-restart
+test remains an explicit local test because it restarts a specifically named container.
+
 For future code changes, retain immutable evidence provenance and rerun applicable
 checks. Do not move the existing version tag to incorporate documentation updates.
 No paid model calls are included in the recorded campaign; optional adapter tests are offline.

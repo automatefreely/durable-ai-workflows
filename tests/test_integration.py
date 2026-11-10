@@ -8,7 +8,9 @@ from pathlib import Path
 
 import httpx
 import pytest
+from temporalio import activity
 from temporalio.client import Client, WorkflowHistory
+from temporalio.exceptions import ApplicationError
 from temporalio.worker import Replayer, Worker
 
 from lab.core import BASE
@@ -117,3 +119,29 @@ async def test_pending_approval_survives_temporal_restart():
             assert (await asyncio.wait_for(h.result(), 15))["status"] == "completed"
         events = (await c.get(f"{BASE}/_test/snapshot/{op}")).json()["events"]
         assert sum(e["kind"] == "model_call" for e in events) == 1
+
+
+@pytest.mark.parametrize("invalid", [False, True])
+async def test_proposal_failure_classification(invalid):
+    op = uuid.uuid4().hex
+    attempts = []
+
+    @activity.defn(name="propose")
+    async def failing_proposal(data: dict) -> dict:
+        attempts.append(activity.info().attempt)
+        if invalid:
+            raise ApplicationError("Invalid invoice proposal", type="InvalidProposal", non_retryable=True)
+        raise ApplicationError("Synthetic provider outage", type="ProviderUnavailable")
+
+    client = await Client.connect(os.environ.get("TEMPORAL_ADDRESS", "127.0.0.1:7233"))
+    async with Worker(
+        client, task_queue=op, workflows=[InvoiceWorkflow], activities=[failing_proposal, create, awaiting]
+    ):
+        handle = await client.start_workflow(InvoiceWorkflow.run, {"operation_id": op}, id=op, task_queue=op)
+        result = await asyncio.wait_for(handle.result(), 15)
+    assert result == {"status": "rejected" if invalid else "proposal_failed"}
+    assert attempts == ([1] if invalid else [1, 2, 3])
+    async with httpx.AsyncClient(timeout=5) as c:
+        snapshot = (await c.get(f"{BASE}/_test/snapshot/{op}")).json()
+        assert snapshot["invoice_ids"] == []
+        assert snapshot["events"] == []  # No approval or invoice Activity was scheduled.

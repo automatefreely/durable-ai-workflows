@@ -21,7 +21,6 @@ Linux containers are required (including Docker Desktop on macOS/Windows).
 ```sh
 git clone https://github.com/automatefreely/durable-ai-workflows.git
 cd durable-ai-workflows
-git checkout v1.0.0
 # Set immutable source provenance for the image's runner.
 export LAB_SOURCE_COMMIT="$(git rev-parse HEAD)"
 docker compose build
@@ -35,6 +34,14 @@ docker compose run --rm runner
 If using the prepared source archive instead of Git, skip clone/checkout and set
 `LAB_SOURCE_COMMIT` from its included `SOURCE_COMMIT.txt`. A GitHub-generated archive
 without that file needs the release commit SHA supplied explicitly.
+
+The full recorded campaign took **20.5 minutes** in its recorded environment, excluding
+image building and dependency downloads. The 24-case smoke run is shorter; runtime
+varies with hardware and scheduling.
+
+The quickstart uses the maintained code on `main`. For the exact source snapshot used
+in the published 240-run evidence, run `git checkout v1.0.0` before building. That tag
+and its evidence are immutable; later maintenance changes are documented below.
 
 Open `artifacts/latest/REPORT.md`. Each run also has input, JSONL events, worker logs,
 a result, and (for Temporal variants) execution history. The CLI exits nonzero on an
@@ -113,9 +120,38 @@ credentials in artifacts, command arguments, or committed files. For containers,
 pass only `-e OPENAI_API_KEY -e OPENAI_MODEL` to `compose run`; these flags forward
 already-set environment variables without putting values in shell history.
 
+## Proposal outcomes
+
+The maintained workflow distinguishes invalid proposals (`rejected`) from exhausted
+model/provider failures (`proposal_failed`). Both exit before approval and invoice
+submission. Once invoice dispatch may have occurred, an exhausted operation returns
+`needs_reconciliation` instead. Invalid proposals are not retried; operational proposal
+failures follow the bounded retry policy.
+
+In the historical `v1.0.0` snapshot, all proposal Activity failures returned `rejected`.
+The maintenance fix separates those cases without changing the published fixture results.
+
 ## Evidence and limitations
 
-See `evidence/v1/REPORT.md` and `docs/architecture.md`. The report is generated from
+See `evidence/v1/REPORT.md` and `docs/architecture.md`. Check the original file hashes
+without regenerating them:
+
+```sh
+(cd evidence/v1 && sha256sum --check SHA256SUMS)
+```
+
+For a new full smoke campaign, independently verify raw events and counts inside the
+container (where generated artifact files are writable):
+
+```sh
+docker compose run --rm runner python -m lab.verify /artifacts/smoke --repeat 1
+```
+
+`lab.verify` rebuilds summaries and writes hashes; use it on new artifacts or a temporary
+copy, not to validate an existing checksum manifest. CI checks the original committed
+hashes first, validates a temporary copy, and replays all 160 published histories.
+
+ The report is generated from
 per-run artifacts, not handwritten. Timing includes local scheduling and worker
 startup. Local success counts are not a production availability estimate. Synthetic
 fixtures test orchestration, not model competence. SQLite on a Temporal dev server
